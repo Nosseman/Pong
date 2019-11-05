@@ -8,8 +8,12 @@ import turtle
 ikkuna = turtle.Screen()
 ikkuna.title("Pong")
 ikkuna.bgcolor("black")
-ikkuna.setup(width=800, height=600)
+ikkuna.setup(width=850, height=650)
 ikkuna.tracer(0)
+
+# Muuttujat pelaajien pisteille
+pisteet1 = 0
+pisteet2 = 0
 
 # Luodaan melat
 # Vasen:
@@ -19,9 +23,18 @@ melaV.shape("square")
 melaV.color("white")
 melaV.shapesize(stretch_wid=5, stretch_len=1)
 melaV.penup()
-melaV.goto(-350, 0)
+melaV.goto(-400, 0)
 
 # Oikea:
+melaO = turtle.Turtle()
+melaO.speed(0)
+melaO.shape("square")
+melaO.color("white")
+melaO.shapesize(stretch_wid=5, stretch_len=1)
+melaO.penup()
+melaO.goto(400, 0)
+
+# Luodaan pallo
 pallo = turtle.Turtle()
 pallo.speed(0)
 pallo.shape("square")
@@ -31,46 +44,46 @@ pallo.goto(0, 0)
 pallo.dx = 1
 pallo.dy = -1
 
-# Luodaan pallo
-melaO = turtle.Turtle()
-melaO.speed(0)
-melaO.shape("square")
-melaO.color("white")
-melaO.shapesize(stretch_wid=5, stretch_len=1)
-melaO.penup()
-melaO.goto(350, 0)
+# Luodaan scoreboard
+pisteet = turtle.Turtle()
+pisteet.speed(0)
+pisteet.color("white")
+pisteet.penup()
+pisteet.hideturtle()
+pisteet.goto(0, 270)
+pisteet.write("Pelaaja1 0 - 0 Pelaaja2", align="center", font=("Arial", 20, "normal"))
 
 # Funktiot melojen liikuttamiselle
 def melaV_ylos():
     y = melaV.ycor()
     # m‰‰ritell‰‰n paljonko mela liikkuu ylˆs
-    y += 20
+    y += 30
     # asetetaan uusi koordinaatti vanhan koordinaatin tilalle
     melaV.sety(y)
-    # estet‰‰n melojen kent‰n ylimeno
-    if melaV.ycor() > 250:
-        melaV.sety(250)
+    # estet‰‰n melojen kent‰n ulkopuolelle meno
+    if melaV.ycor() > 280:
+        melaV.sety(280)
 
 def melaV_alas():
     y = melaV.ycor()
-    y -= 20
+    y -= 30
     melaV.sety(y)
-    if melaV.ycor() < -250:
-        melaV.sety(-250)
+    if melaV.ycor() < -280:
+        melaV.sety(-280)
 
 def melaO_ylos():
     y = melaO.ycor()
-    y += 20
+    y += 30
     melaO.sety(y)
-    if melaO.ycor() > 250:
-        melaO.sety(250)
+    if melaO.ycor() > 280:
+        melaO.sety(280)
 
 def melaO_alas():
     y = melaO.ycor()
-    y -= 20
+    y -= 30
     melaO.sety(y)
-    if melaO.ycor() < -250:
-        melaO.sety(-250)
+    if melaO.ycor() < -280:
+        melaO.sety(-280)
 
 # Asetetaan ikkuna kuuntelemaan n‰pp‰imistˆ‰
 ikkuna.listen()
@@ -80,8 +93,10 @@ ikkuna.onkeypress(melaO_ylos, "Up")
 ikkuna.onkeypress(melaO_alas, "Down")
 
 
-# Silmukka
-while True:
+# Silmukka pelille
+silmukka = True
+
+while silmukka:
     ikkuna.update()
 
     # Laitetaan pallo liikkumaan
@@ -89,29 +104,49 @@ while True:
     pallo.sety(pallo.ycor() + pallo.dy)
 
     # Muutetaan pallon suunta sen osuessa ruudun yl‰ ja alalaitaan
-    if pallo.ycor() > 290:
-        pallo.sety(290)
+    if pallo.ycor() > 315:
+        pallo.sety(315)
         # vaihdetaan suunta
         pallo.dy *= -1
 
-    if pallo.ycor() < -290:
-        pallo.sety(-290)
+    if pallo.ycor() < -315:
+        pallo.sety(-315)
         pallo.dy *= -1
 
     # Jos pallo ohittaa melan, siirret‰‰n takaisin keskelle
-    if pallo.xcor() > 390:
+    if pallo.xcor() > 410:
         pallo.goto(0, 0)
         # vaihdetaan suunta
         pallo.dx *= -1
+        # lis‰t‰‰n pelaaja1:lle piste
+        pisteet1 += 1
+        # tyhjennet‰‰n scoreboard teksti
+        pisteet.clear()
+        # korvataan scoreboard
+        pisteet.write("Pelaaja1 {} - {} Pelaaja2".format(pisteet1, pisteet2), align="center", font=("Arial", 20, "normal"))
 
-    if pallo.xcor() < -390:
+    if pallo.xcor() < -410:
         pallo.goto(0, 0)
         pallo.dx *= -1
+        pisteet2 += 1
+        pisteet.clear()
+        pisteet.write("Pelaaja1 {} - {} Pelaaja2".format(pisteet1, pisteet2), align="center", font=("Arial", 20, "normal"))
 
     # Mit‰ tapahtuu jos pallot osuvat melaan
 
-    if pallo.xcor() > 340 and pallo.ycor() < melaO.ycor() + 40 and pallo.ycor() > melaO.ycor() -40:
+    if (pallo.xcor() > 390) and (pallo.ycor() < melaO.ycor() + 40) and (pallo.ycor() > melaO.ycor() - 40):
         pallo.dx *= -1
 
-    if pallo.xcor() < -340 and pallo.ycor() < melaV.ycor() + 40 and pallo.ycor() > melaV.ycor() -40:
+    if (pallo.xcor() < -390) and (pallo.ycor() < melaV.ycor() + 40) and (pallo.ycor() > melaV.ycor() - 40):
         pallo.dx *= -1
+        
+    # P‰‰tet‰‰n peli kun toinen pelaajista saavuttaa pisterajan
+    if (pisteet1 == 2) or (pisteet2 == 2):
+        silmukka = False
+        ikkuna.clear()
+        ikkuna.bgcolor("black")
+        pisteet.goto(0, 0)
+        if (pisteet1 > pisteet2):
+            pisteet.write("Peli p‰‰ttyi. \nPelaaja1 voitti! ", align="center", font=("Arial", 20, "normal"))
+        else:
+            pisteet.write("Peli p‰‰ttyi. \nPelaaja2 voitti! ", align="center", font=("Arial", 20, "normal"))
