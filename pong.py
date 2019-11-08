@@ -94,9 +94,8 @@ ikkuna.onkeypress(melaO_alas, "Down")
 
 
 # Silmukka pelille
-silmukka = True
 
-while silmukka:
+while True:
     ikkuna.update()
 
     # Laitetaan pallo liikkumaan
@@ -133,7 +132,6 @@ while silmukka:
         pisteet.write("Pelaaja1 {} - {} Pelaaja2".format(pisteet1, pisteet2), align="center", font=("Arial", 20, "normal"))
 
     # Mit‰ tapahtuu jos pallot osuvat melaan
-
     if (pallo.xcor() > 390) and (pallo.ycor() < melaO.ycor() + 40) and (pallo.ycor() > melaO.ycor() - 40):
         pallo.dx *= -1
 
@@ -141,8 +139,7 @@ while silmukka:
         pallo.dx *= -1
         
     # P‰‰tet‰‰n peli kun toinen pelaajista saavuttaa pisterajan
-    if (pisteet1 == 2) or (pisteet2 == 2):
-        silmukka = False
+    if (pisteet1 == 15) or (pisteet2 == 15):
         ikkuna.clear()
         ikkuna.bgcolor("black")
         pisteet.goto(0, 0)
@@ -150,3 +147,5 @@ while silmukka:
             pisteet.write("Peli p‰‰ttyi. \nPelaaja1 voitti! ", align="center", font=("Arial", 20, "normal"))
         else:
             pisteet.write("Peli p‰‰ttyi. \nPelaaja2 voitti! ", align="center", font=("Arial", 20, "normal"))
+        break
+    
